@@ -57,7 +57,8 @@
 
 <script>
 import { validMobile } from '@/utils/validate'
-
+// 引入登录api
+import { login } from '@/api/user.js'
 export default {
   name: 'Login',
   data() {
@@ -137,6 +138,7 @@ export default {
       //     return false
       //   }
       // })
+      login(this.loginForm)
     }
   }
 }
