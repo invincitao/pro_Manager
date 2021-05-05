@@ -58,7 +58,7 @@
 <script>
 import { validMobile } from '@/utils/validate'
 // 引入登录api
-import { login } from '@/api/user.js'
+// import { login } from '@/api/user.js'
 export default {
   name: 'Login',
   data() {
@@ -123,7 +123,7 @@ export default {
         this.$refs.password.focus()
       })
     },
-    handleLogin() {
+    async handleLogin() {
       // this.$refs.loginForm.validate(valid => {
       //   if (valid) {
       //     this.loading = true
@@ -138,7 +138,12 @@ export default {
       //     return false
       //   }
       // })
-      login(this.loginForm)
+      // login(this.loginForm)
+      await this.$refs.loginForm.validate()
+      this.loading = true
+      await this.$store.dispatch('user/login', this.loginForm)
+      this.loading = false
+      this.$router.push('/')
     }
   }
 }
