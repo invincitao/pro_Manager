@@ -1,7 +1,8 @@
-import { login } from '@/api/user.js'
+import { login, getUserInfo, getUserDetailById } from '@/api/user.js'
 import { getToken, setToken } from '@/utils/auth.js'
 const state = {
-  token: getToken()
+  token: getToken(),
+  userInfo: {}
 }
 const mutations = {
   // 设置token
@@ -11,6 +12,12 @@ const mutations = {
   },
   removeToken(state) {
     state.token = null
+  },
+  setUserInfo(state, data) {
+    state.userInfo = { ...data }
+  },
+  removeInfo(state) {
+    state.userInfo = {}
   }
 }
 const actions = {
@@ -23,6 +30,16 @@ const actions = {
     } catch (error) {
       console.log(error)
     }
+  },
+  // 获取用户基本信息
+  async getUserInfo(store) {
+    const simpleData = await getUserInfo()
+    const detail = await getUserDetailById(simpleData.userId)
+    const data = {
+      ...simpleData,
+      ...detail
+    }
+    store.commit('setUserInfo', data)
   }
 }
 
