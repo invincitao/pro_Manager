@@ -143,6 +143,7 @@ export default {
       this.loading = true
       await this.$store.dispatch('user/login', this.loginForm)
       this.loading = false
+      this.$message.success('登录成功')
       this.$router.push('/')
     }
   }

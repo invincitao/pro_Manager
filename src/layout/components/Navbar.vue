@@ -53,8 +53,17 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$confirm('要退出, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message.success('成功退出')
+        this.$store.dispatch('user/loginOut')
+        this.$router.push('/login')
+      }).catch(() => {
+        this.$message.info('已取消操作')
+      })
     }
   }
 }
@@ -116,13 +125,13 @@ export default {
 
     .avatar-container {
       margin-right: 30px;
+          cursor: pointer;
 
       .avatar-wrapper {
         margin-top: 5px;
         position: relative;
 
           .user-avatar {
-          cursor: pointer;
           width: 40px;
           height: 40px;
           border-radius: 15px;

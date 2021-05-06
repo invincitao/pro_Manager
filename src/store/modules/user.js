@@ -40,6 +40,11 @@ const actions = {
       ...detail
     }
     store.commit('setUserInfo', data)
+  },
+  // 退出登录
+  loginOut(store) {
+    store.commit('removeToken')
+    store.commit('removeInfo')
   }
 }
 
