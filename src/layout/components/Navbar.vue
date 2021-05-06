@@ -11,7 +11,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="staffPhoto" class="user-avatar">
+          <img v-imgerr="require('@/assets/common/leifeng.jpg')" :src="staffPhoto" class="user-avatar">
           <span class="name">{{ name }}</span>
           <i class="el-icon-caret-bottom" style="color:#fff" />
         </div>
@@ -123,8 +123,8 @@ export default {
 
           .user-avatar {
           cursor: pointer;
-          width: 30px;
-          height: 30px;
+          width: 40px;
+          height: 40px;
           border-radius: 15px;
           vertical-align: middle;
 

@@ -19,7 +19,9 @@ import '@/permission' // permission control
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
-
+// 封装指令，为了防止图片报错
+import { imgerr } from '@/directive'
+Vue.directive('imgerr', imgerr)
 Vue.config.productionTip = false
 
 new Vue({
