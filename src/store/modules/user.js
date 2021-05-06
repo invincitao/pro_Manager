@@ -1,5 +1,5 @@
 import { login, getUserInfo, getUserDetailById } from '@/api/user.js'
-import { getToken, setToken } from '@/utils/auth.js'
+import { getToken, setToken, removeToken, setTime } from '@/utils/auth.js'
 const state = {
   token: getToken(),
   userInfo: {}
@@ -12,6 +12,7 @@ const mutations = {
   },
   removeToken(state) {
     state.token = null
+    removeToken()
   },
   setUserInfo(state, data) {
     state.userInfo = { ...data }
@@ -26,6 +27,7 @@ const actions = {
     try {
       const res = await login(data)
       // const token = res.data.data
+      setTime()
       store.commit('setToken', res)
     } catch (error) {
       console.log(error)

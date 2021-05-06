@@ -1,26 +1,37 @@
 import axios from 'axios'
-import Promise from 'core-js'
 import { Message } from 'element-ui'
 import store from '@/store'
+import { getTime } from '@/utils/auth'
+import router from '@/router'
 // create an axios instance
+const checkTimeout = () => {
+  const currentTime = (new Date()).getTime()
+  const loginTime = getTime()
+  const duration = 1000 * 60 * 60 * 2
+  return currentTime - loginTime > duration
+}
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
 // 请求拦截器-注入token
-// request interceptor
 service.interceptors.request.use(
   config => {
     const token = store.getters.token
     if (token) {
-      config.headers.Authorization = 'Bearer ' + token
+      if (checkTimeout()) {
+        // 销毁数据并返回登录页
+        store.dispatch('user/loginOut')
+        router.push('/login')
+      } else {
+        config.headers.Authorization = 'Bearer ' + token
+      }
     }
     return config
   })
 
 // 响应拦截器
-// response interceptor
 service.interceptors.response.use(
   res => {
     const { data, success, message } = res.data
@@ -35,7 +46,13 @@ service.interceptors.response.use(
   },
   err => {
     // 请求错误  路径  网络问题
-    Message.error(err.message)
+    console.dir(err)
+    if (err.response && err.response.data && err.response.data.code === 10002) {
+      store.dispatch('user/loginOut')
+      router.push('/login')
+    } else {
+      Message.error(err.messag)
+    }
     return Promise.reject(err)
   }
 )
