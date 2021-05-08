@@ -3,7 +3,11 @@
     <div class="app-container">
       <el-card class="tree-card">
 
-        <treeTools :treenode="company" :isroot="true" />
+        <treeTools
+          :treenode="company"
+          :isroot="true"
+          @addDepart="addDepart"
+        />
 
         <el-tree :data="departs" :props="{lable:'name'}" :default-expand-all="true">
           <template #default="scpoed">
@@ -11,10 +15,16 @@
               :treenode="scpoed.data"
               :isroot="false"
               @delDepart="getDepartments"
+              @addDepart="addDepart"
             />
           </template>
         </el-tree>
       </el-card>
+
+      <addDept
+        :show-dialog="showDialog"
+        :treenode="treenode"
+      />
     </div>
   </div>
 </template>
@@ -23,9 +33,11 @@
 import { getDepartments } from '@/api/department'
 import { treeDatadepart } from '@/utils/index'
 import treeTools from './components/tree-tool'
+import addDept from './components/add-dept'
 export default {
   components: {
-    treeTools
+    treeTools,
+    addDept
   },
   data() {
     return {
@@ -33,8 +45,9 @@ export default {
         name: '江苏传智播客教育科技股份有限公司',
         manager: '负责人'
       },
-      departs: []
-
+      departs: [],
+      showDialog: false,
+      treenode: {}
     }
   },
   async created() {
@@ -45,6 +58,10 @@ export default {
       const res = await getDepartments()
       // this.departs = res.depts
       this.departs = treeDatadepart(res.depts, '')
+    },
+    addDepart(treenode) {
+      this.showDialog = true
+      this.treenode = treenode
     }
   }
 }
