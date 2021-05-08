@@ -115,3 +115,21 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+export function treeDatadepart(list, pid) {
+  // 先遍历所有的数据
+  list.forEach(item => {
+    // 如果顶级部门就不需要操作
+    if (item.pid !== pid) {
+      // 找出父部门
+      const parent = list.find(el => el.id === item.pid)
+      if (parent) {
+        // 如果是父部门就找到子部门放进去
+        parent.children = parent.children || []
+        parent.children.push(item)
+      }
+    }
+  })
+  // 过滤其他的子部门
+  return list.filter(item => item.pid === pid)
+}

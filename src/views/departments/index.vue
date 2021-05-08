@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { getDepartments } from '@/api/department'
+import { treeDatadepart } from '@/utils/index'
 import treeTools from './components/tree-tool'
 export default {
   components: {
@@ -27,10 +29,18 @@ export default {
         name: '江苏传智播客教育科技股份有限公司',
         manager: '负责人'
       },
-      departs: [{ name: '总裁办', manager: '曹操', children: [{ name: '董事会', manager: '曹丕' }] },
-        { name: '行政部', manager: '刘备' },
-        { name: '人事部', manager: '孙权' }]
+      departs: []
 
+    }
+  },
+  async created() {
+    this.getDepartments()
+  },
+  methods: {
+    async getDepartments() {
+      const res = await getDepartments()
+      // this.departs = res.depts
+      this.departs = treeDatadepart(res.depts, '')
     }
   }
 }
