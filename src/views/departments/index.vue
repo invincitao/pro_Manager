@@ -9,21 +9,24 @@
           @addDepart="addDepart"
         />
 
-        <el-tree :data="departs" :props="{lable:'name'}" :default-expand-all="true">
+        <el-tree :expand-on-click-node="false" :data="departs" :props="{lable:'name'}" :default-expand-all="true">
           <template #default="scpoed">
             <treeTools
               :treenode="scpoed.data"
               :isroot="false"
               @delDepart="getDepartments"
               @addDepart="addDepart"
+              @editDepart="editDepart"
             />
           </template>
         </el-tree>
       </el-card>
 
       <addDept
-        :show-dialog="showDialog"
+        ref="addDept"
+        :show-dialog.sync="showDialog"
         :treenode="treenode"
+        @addDepart="getDepartments"
       />
     </div>
   </div>
@@ -62,6 +65,11 @@ export default {
     addDepart(treenode) {
       this.showDialog = true
       this.treenode = treenode
+    },
+    editDepart(treenode) {
+      this.showDialog = true
+      this.treenode = treenode
+      this.$refs.addDept.getDepartDetail(treenode.id)
     }
   }
 }
