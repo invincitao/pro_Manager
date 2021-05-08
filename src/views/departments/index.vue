@@ -7,7 +7,11 @@
 
         <el-tree :data="departs" :props="{lable:'name'}" :default-expand-all="true">
           <template #default="scpoed">
-            <treeTools :treenode="scpoed.data" :isroot="false" />
+            <treeTools
+              :treenode="scpoed.data"
+              :isroot="false"
+              @delDepart="getDepartments"
+            />
           </template>
         </el-tree>
       </el-card>
