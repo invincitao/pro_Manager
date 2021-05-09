@@ -63,12 +63,14 @@
 
         </el-tabs>
       </el-card>
+      <!-- 弹出框 -->
+
     </div>
   </div>
 </template>
 
 <script>
-import { getCompanyInfo, getRoleList } from '@/api/setting'
+import { getCompanyInfo, getRoleList, delRole } from '@/api/setting'
 export default {
   data() {
     return {
@@ -109,7 +111,16 @@ export default {
     },
     // 删除
     async delRole(id) {
-
+      // 二次校验
+      await this.$confirm('确定删除？')
+      // 发请求
+      await delRole(id)
+      // 优化
+      if (this.roleList.length === 1 && this.page.page > 1) this.page.page--
+      // 提示用户
+      this.$message.success('删除成功')
+      // 刷新页面
+      this.getRoleList()
     },
     // 编辑
     async editRole(id) {
