@@ -65,8 +65,8 @@
         </el-tabs>
       </el-card>
       <!-- 弹出框 -->
-      <el-dialog title="编辑弹层" :visible="showDialog" @close="btnCancel">
-        <el-form ref="roleForm" :model="roleForm" :rules="rules" label-width="120px">
+      <el-dialog :title="titleText" :visible="showDialog" @close="btnCancel">
+        <el-form v-if="showDialog" ref="roleForm" :model="roleForm" :rules="rules" label-width="120px">
           <el-form-item label="角色名称" prop="name">
             <el-input v-model="roleForm.name" />
           </el-form-item>
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { getCompanyInfo, getRoleList, delRole } from '@/api/setting'
+import { getCompanyInfo, getRoleList, delRole, getRoleDetail, editRole, addRole } from '@/api/setting'
 export default {
   data() {
     return {
@@ -102,7 +102,7 @@ export default {
       roleList: [],
       page: {
         page: 1,
-        pagesize: 2,
+        pagesize: 10,
         total: 0
       },
       // 控制弹出框
@@ -119,6 +119,11 @@ export default {
           { required: true, message: '该项不能为空', trigger: 'blur' }
         ]
       }
+    }
+  },
+  computed: {
+    titleText() {
+      return this.roleForm.id ? '编辑角色' : '新增角色'
     }
   },
   created() {
@@ -153,17 +158,42 @@ export default {
       // 刷新页面
       this.getRoleList()
     },
-    // 编辑
+    // 编辑和修改
     async editRole(id) {
+      // 回显数据
+      this.roleForm = await getRoleDetail(id)
+      // 控制弹窗
       this.showDialog = true
     },
     // 取消
     btnCancel() {
+      // 恢复表单数据
+      this.roleForm = {
+        name: '',
+        description: ''
+      }
+      // 清除校验
+      this.$refs.roleForm.resetFields()
       this.showDialog = false
     },
     // 确定
-    btnOK() {
-
+    async btnOK() {
+      // 没有数据阻止发请求
+      await this.$refs.roleForm.validate()
+      // 发请求
+      if (this.roleForm.id) {
+        // 编辑
+        await editRole(this.roleForm)
+      } else {
+        // 添加
+        await addRole(this.roleForm)
+      }
+      // 提示用户
+      this.$message.success('操作成功')
+      // 关闭弹窗
+      this.showDialog = false
+      // 刷新页面
+      this.getRoleList()
     }
   }
 }
