@@ -22,6 +22,15 @@ Vue.use(ElementUI, { locale })
 // 封装指令，为了防止图片报错
 import { imgerr } from '@/directive'
 Vue.directive('imgerr', imgerr)
+
+// 全局组件的封装
+// import PageTools from '@/components/PageTools'
+// Vue.component('PageTools', PageTools)
+
+// 用Vue.use机制注册组件
+import Component from '@/components/index.js'
+Vue.use(Component)
+
 Vue.config.productionTip = false
 
 new Vue({

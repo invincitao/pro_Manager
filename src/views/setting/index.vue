@@ -147,16 +147,20 @@ export default {
     },
     // 删除
     async delRole(id) {
-      // 二次校验
-      await this.$confirm('确定删除？')
-      // 发请求
-      await delRole(id)
-      // 优化
-      if (this.roleList.length === 1 && this.page.page > 1) this.page.page--
-      // 提示用户
-      this.$message.success('删除成功')
-      // 刷新页面
-      this.getRoleList()
+      try {
+        // 二次校验
+        await this.$confirm('确定删除？')
+        // 发请求
+        await delRole(id)
+        // 优化
+        if (this.roleList.length === 1 && this.page.page > 1) this.page.page--
+        // 提示用户
+        this.$message.success('删除成功')
+        // 刷新页面
+        this.getRoleList()
+      } catch (error) {
+        console.log(error)
+      }
     },
     // 编辑和修改
     async editRole(id) {

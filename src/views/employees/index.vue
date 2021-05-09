@@ -1,9 +1,10 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <h2>
-        员工
-      </h2>
+      <PageTools :show-before="true">
+        <template #before>这是前面的内容</template>
+        <template #after>这是后面的内容</template>
+      </PageTools>
     </div>
   </div>
 </template>
