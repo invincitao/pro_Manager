@@ -31,6 +31,14 @@ Vue.directive('imgerr', imgerr)
 import Component from '@/components/index.js'
 Vue.use(Component)
 
+// 一次性注册大量过滤器
+import * as filter from '@/filters/index'
+
+for (const key in filter) {
+  const name = key
+  const fn = filter[key]
+  Vue.filter(name, fn)
+}
 Vue.config.productionTip = false
 
 new Vue({
