@@ -14,3 +14,12 @@ export function getEmployeeList(params) {
     params
   })
 }
+
+// 导入员工列表
+export function importEmployee(data) {
+  return router({
+    url: '/sys/user/batch',
+    method: 'post',
+    data
+  })
+}
