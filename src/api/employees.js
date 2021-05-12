@@ -23,3 +23,12 @@ export function importEmployee(data) {
     data
   })
 }
+// 添加员工
+export function addEmployee(data) {
+  return router({
+    url: '/sys/user',
+    method: 'post',
+    data
+  })
+}
+

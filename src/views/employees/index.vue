@@ -6,7 +6,7 @@
         <template slot="after">
           <el-button size="small" type="warning" @click="$router.push('/import')">导入</el-button>
           <el-button size="small" type="danger" @click="exportEmployees">导出</el-button>
-          <el-button size="small" type="primary">新增员工</el-button>
+          <el-button size="small" type="primary" @click="showDialog = true">新增员工</el-button>
         </template>
       </page-tools>
       <!-- 放置表格和分页 -->
@@ -53,6 +53,7 @@
           />
         </el-row>
       </el-card>
+      <addEmployee :show-dialog.sync="showDialog" />
     </div>
   </div>
 </template>
@@ -61,14 +62,19 @@
 import { getEmployeeList } from '@/api/employees'
 import employeeEnum from '@/api/constant/employees'
 import { formatDate } from '@/filters'
+import addEmployee from './components/add-employee'
 export default {
   // filters: {
   //   formatDate(oldValue) {
   //     return oldValue.split('T')[0]
   //   }
   // },
+  components: {
+    addEmployee
+  },
   data() {
     return {
+      showDialog: false,
       // 员工列表
       employeeList: [],
       page: {
