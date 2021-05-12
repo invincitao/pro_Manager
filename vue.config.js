@@ -40,7 +40,8 @@ module.exports = {
     // 配置跨域代理
     proxy: {
       '/api': {
-        target: 'http://ihrm-java.itheima.net',
+        // target: 'http://ihrm-java.itheima.net',
+        target: 'http://localhost:3000',
         changeOrigin: true
       }
     }

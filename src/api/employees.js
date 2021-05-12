@@ -7,7 +7,7 @@ export function getEmployeeSimple() {
   })
 }
 
-// 获取员工简单列表
+// 获取员工列表
 export function getEmployeeList(params) {
   return router({
     url: '/sys/user',

@@ -5,7 +5,7 @@
         <span slot="before">共{{ page.total }}条记录</span>
         <template slot="after">
           <el-button size="small" type="warning" @click="$router.push('/import')">导入</el-button>
-          <el-button size="small" type="danger">导出</el-button>
+          <el-button size="small" type="danger" @click="exportEmployees">导出</el-button>
           <el-button size="small" type="primary">新增员工</el-button>
         </template>
       </page-tools>
@@ -60,6 +60,7 @@
 <script>
 import { getEmployeeList } from '@/api/employees'
 import employeeEnum from '@/api/constant/employees'
+import { formatDate } from '@/filters'
 export default {
   // filters: {
   //   formatDate(oldValue) {
@@ -94,8 +95,49 @@ export default {
     },
     // 用枚举方法实现格式化聘用形式
     formOfEmployment(row, column, cellValue) {
-      const obj = employeeEnum.hireType.find(item => item.id === cellValue)
+      const obj = employeeEnum.hireType.find(item => item.id === Number(cellValue))
       return obj ? obj.value : '未知'
+    },
+    // 导出
+    async exportEmployees() {
+      const { export_json_to_excel } = await import('@/vendor/Export2Excel')
+      // 获取员工列表
+      const { rows } = await getEmployeeList({ page: 1, size: this.page.total })
+      console.log(rows)
+      // 创建翻译列表
+      const dict = {
+        '手机号': 'mobile',
+        '姓名': 'username',
+        '入职日期': 'timeOfEntry',
+        '聘用形式': 'formOfEmployment',
+        '转正日期': 'correctionTime',
+        '工号': 'workNumber',
+        '部门': 'departmentName'
+      }
+      const userData = rows.map(user => {
+        return this.ObjArr(user, dict)
+      })
+      export_json_to_excel({
+        header: Object.keys(dict),
+        data: userData
+      })
+    },
+    // 导出逻辑
+    ObjArr(user, dict) {
+      const newArr = []
+      for (const key in dict) {
+        const enKey = dict[key]
+        const value = user[enKey]
+        if (enKey === 'timeOfEntry' || enKey === 'correctionTime') {
+          newArr.push(new Date(formatDate(value)))
+        } else if (enKey === 'formOfEmployment') {
+          const obj = employeeEnum.hireType.find(item => item.id === value)
+          newArr.push(obj ? obj.value : '未知')
+        } else {
+          newArr.push(value)
+        }
+      }
+      return newArr
     }
   }
 }
