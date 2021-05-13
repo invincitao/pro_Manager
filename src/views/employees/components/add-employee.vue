@@ -112,28 +112,14 @@ export default {
       this.formData.departmentName = data.name
       this.showTree = false
     },
-    // btnCancel() {
-    //   this.formData = {
-    //     username: '',
-    //     mobile: '',
-    //     timeOfEntry: '',
-    //     formOfEmployment: '',
-    //     workNumber: '',
-    //     departmentName: '',
-    //     correctionTime: ''
-    //   }
-    //   this.$refs.addEmployee.resetFileds()
-    //   this.$emit('update:showDialog', false)
-    // },
-    // 取消
     btnCancel() {
       this.formData = {
         username: '',
         mobile: '',
+        timeOfEntry: '',
         formOfEmployment: '',
         workNumber: '',
         departmentName: '',
-        timeOfEntry: '',
         correctionTime: ''
       }
       this.$refs.addEmployee.resetFields()

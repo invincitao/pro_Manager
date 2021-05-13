@@ -32,13 +32,13 @@
             </template>
           </el-table-column>
           <el-table-column label="操作" sortable="" fixed="right" width="280">
-            <template>
-              <el-button type="text" size="small">查看</el-button>
+            <template #default="{row}">
+              <el-button type="text" size="small" @click="$router.push('/employees/detail/'+ row.id)">查看</el-button>
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
               <el-button type="text" size="small">角色</el-button>
-              <el-button type="text" size="small">删除</el-button>
+              <el-button type="text" size="small" @click="delEmployee(row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { getEmployeeList } from '@/api/employees'
+import { getEmployeeList, delEmployee } from '@/api/employees'
 import employeeEnum from '@/api/constant/employees'
 import { formatDate } from '@/filters'
 import addEmployee from './components/add-employee'
@@ -144,6 +144,23 @@ export default {
         }
       }
       return newArr
+    },
+    // 删除员工
+    async delEmployee(id) {
+      try {
+        // 二次校验
+        await this.$confirm('确认删除该员工？')
+        // 发请求
+        await delEmployee(id)
+        // 优化
+        if (this.employeeList.length === 1 && this.page.page > 1) this.page.page--
+        // 提示用户
+        this.$message.success('删除成功')
+        // 刷新页面
+        this.getEmployeeList()
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
