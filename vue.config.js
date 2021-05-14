@@ -42,6 +42,7 @@ module.exports = {
       '/api': {
         // target: 'http://ihrm-java.itheima.net',
         target: 'http://localhost:3000',
+        // target: 'http://192.168.79.65:3000',
         changeOrigin: true
       }
     }

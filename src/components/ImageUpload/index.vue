@@ -9,6 +9,7 @@
       :on-remove="onRemove"
       :on-change="onChange"
       :http-request="upload"
+      :before-upload="beforeUpload"
     >
       <i class="el-icon-plus" />
     </el-upload>
@@ -21,14 +22,15 @@
 </template>
 
 <script>
+import COS from 'cos-js-sdk-v5'
+const cos = new COS({
+  SecretId: 'AKIDoaAYlmcHpEap0yjHerreHl5YxDJBrKag',
+  SecretKey: '0zrkjYBbquzzoTwCF5lGYcT6WimngNr7'
+})
 export default {
   data() {
     return {
-      fileList: [
-        {
-          url: 'https://img0.baidu.com/it/u=2648200177,1699089516&fm=11&fmt=auto&gp=0.jpg'
-        }
-      ],
+      fileList: [],
       previewURL: '',
       showDialog: false
     }
@@ -48,9 +50,55 @@ export default {
     onChange(file, fileList) {
       this.fileList = [...fileList]
     },
-    // 覆盖原来的默认上传行为
+    // 上传前
+    beforeUpload(file) {
+      // 设置上传图片的大小
+      const maxSize = 20000 * 1024
+      if (file.size > maxSize) {
+        this.$message.warning('图片太大，上传不成功')
+        return false
+      }
+      // 设置类型
+      const acceptType = ['image/jpeg', 'image/jpg']
+      if (!acceptType.includes(file.type)) {
+        this.$message.warning('图片格式不正确，请重新上传')
+        return false
+      }
+    },
+    // 覆盖图片的默认上传行为
     upload(data) {
       console.log(data)
+      cos.putObject({
+        // 储存桶名称
+        Bucket: '77145-1305899718',
+        // 地区代码
+        Region: 'ap-guangzhou',
+        // 上传后的文件名
+        Key: data.file.name + data.file.size,
+        // 写死的标准类型
+        StorageClass: 'STANDARD',
+        // 文件对象本身
+        Body: data.file,
+        // 进度发生变化时的钩子
+        onProgress: (progressData) => {
+          // console.log(JSON.stringify(progressData))
+          // 环形进度条的添加
+          data.file.percent = progressData.percent * 100
+          data.onProgress(data.file)
+        }
+      }, (err, data) => {
+        console.log(err || data)
+        // 上传完毕的数据处理
+        if (!err) {
+          this.fileList[0].url = 'http://' + data.Location
+          this.fileList[0].status = 'success'
+        }
+        // 上传完毕隐藏
+        setTimeout(() => {
+          this.showProgress = false
+        }, 800)
+        this.$message.success('图片上传成功')
+      })
     }
   }
 }

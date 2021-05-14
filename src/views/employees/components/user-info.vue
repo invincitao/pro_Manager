@@ -58,7 +58,7 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
-
+            <ImageUpload ref="userInfoPhoto" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -90,6 +90,7 @@
 
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
+          <ImageUpload ref="formDataPhoto" />
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select v-model="formData.nationalArea" class="inputW2">
@@ -366,19 +367,39 @@ export default {
     // 获取员工列表
     async getUserDetailById() {
       this.userInfo = await getUserDetailById(this.userId)
+      if (this.userInfo.staffPhoto) {
+        this.$refs.userInfoPhoto.fileList = [
+          { url: this.userInfo.staffPhoto }
+        ]
+      }
     },
     // 获取员工的基本信息
     async getPersonalDetail() {
       this.formData = await getPersonalDetail(this.userId)
+      if (this.formData.staffPhoto) {
+        this.$refs.formDataPhoto.fileList = [
+          { url: this.formData.staffPhoto }
+        ]
+      }
     },
     // 保存员工
     async saveUser() {
-      await saveUserDetailById(this.userInfo)
+      const fileList = this.$refs.userInfoPhoto.fileList
+      if (fileList[0] && fileList[0].status !== 'success') {
+        this.$message.warning('图片还未上传成功，请等待')
+        return
+      }
+      await saveUserDetailById({ ...this.userInfo, staffPhoto: fileList[0] ? fileList[0].url : '' })
       this.$message.success('更新成功')
     },
     // 保存员工的基本信息
     async savePersonal() {
-      await updatePersonal({ ...this.formData, id: this.userId })
+      const fileList = this.$refs.formDataPhoto.fileList
+      if (fileList[0] && fileList[0].status !== 'success') {
+        this.$message.warning('图片还未上传成功，请等待')
+        return
+      }
+      await updatePersonal({ ...this.formData, id: this.userId, staffPhoto: this.fileList[0] ? fileList[0].url : '' })
       this.$message.success('更新成功')
     }
   }
