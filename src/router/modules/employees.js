@@ -24,6 +24,14 @@ export default {
       mate: {
         title: '员工详情页'
       }
+    },
+    {
+      path: 'print/:id',
+      component: () => import('@/views/employees/print'),
+      hidden: true,
+      mate: {
+        title: '打印'
+      }
     }
   ]
 }
