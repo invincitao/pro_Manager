@@ -17,6 +17,17 @@
               {{ ((page.page - 1) * page.size) + (scope.$index +1) }}
             </template>
           </el-table-column>
+          <el-table-column label="头像" sortable="" prop="username">
+            <template #default="{row}">
+              <img
+                v-imgerr="require('@/assets/common/head.jpg')"
+                :src="row.staffPhoto"
+                alt=""
+                class="userAvater"
+                @click="showQRcode(row.staffPhoto)"
+              >
+            </template>
+          </el-table-column>
           <el-table-column label="姓名" sortable="" prop="username" />
           <el-table-column label="工号" sortable="" prop="workNumber" />
           <el-table-column label="聘用形式" sortable="" prop="formOfEmployment" :formatter="formOfEmployment" />
@@ -54,6 +65,12 @@
         </el-row>
       </el-card>
       <addEmployee :show-dialog.sync="showDialog" />
+      <!-- 头像 -->
+      <el-dialog title="头像预览" :visible="showAvater" @close="showAvater = false">
+        <el-row type="flex" justify="center">
+          <canvas ref="myCanvas" />
+        </el-row>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -63,6 +80,7 @@ import { getEmployeeList, delEmployee } from '@/api/employees'
 import employeeEnum from '@/api/constant/employees'
 import { formatDate } from '@/filters'
 import addEmployee from './components/add-employee'
+import QRCode from 'qrcode'
 export default {
   // filters: {
   //   formatDate(oldValue) {
@@ -74,6 +92,7 @@ export default {
   },
   data() {
     return {
+      showAvater: false,
       showDialog: false,
       // 员工列表
       employeeList: [],
@@ -88,6 +107,20 @@ export default {
     this.getEmployeeList()
   },
   methods: {
+    // 显示头像
+    showQRcode(url) {
+      if (url) {
+        this.showAvater = true
+        this.$nextTick(() => {
+          QRCode.toCanvas(this.$refs.myCanvas, url, {
+            with: 300,
+            color: {
+              dark: '#4a7afb'
+            }
+          })
+        })
+      }
+    },
     // 获取员工简单列表
     async getEmployeeList() {
       const { rows, total } = await getEmployeeList(this.page)
@@ -166,6 +199,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+::v-deep.userAvater{
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+}
 </style>
