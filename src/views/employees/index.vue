@@ -48,7 +48,7 @@
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button type="text" size="small" @click="assignRole(row.id)">角色</el-button>
               <el-button type="text" size="small" @click="delEmployee(row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -72,6 +72,8 @@
         </el-row>
       </el-dialog>
     </div>
+
+    <assignRole ref="assignRole" :user-id="userId" :show-role-dialog.sync="showRoleDialog" />
   </div>
 </template>
 
@@ -81,6 +83,7 @@ import employeeEnum from '@/api/constant/employees'
 import { formatDate } from '@/filters'
 import addEmployee from './components/add-employee'
 import QRCode from 'qrcode'
+import assignRole from './components/assign-role'
 export default {
   // filters: {
   //   formatDate(oldValue) {
@@ -88,10 +91,13 @@ export default {
   //   }
   // },
   components: {
-    addEmployee
+    addEmployee,
+    assignRole
   },
   data() {
     return {
+      userId: '',
+      showRoleDialog: false,
       showAvater: false,
       showDialog: false,
       // 员工列表
@@ -107,6 +113,12 @@ export default {
     this.getEmployeeList()
   },
   methods: {
+    // 权限
+    assignRole(id) {
+      this.userId = id
+      this.$refs.assignRole.getUserDetailById(id)
+      this.showRoleDialog = true
+    },
     // 显示头像
     showQRcode(url) {
       if (url) {

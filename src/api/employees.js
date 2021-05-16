@@ -81,3 +81,11 @@ export function updateJob(data) {
   })
 }
 
+// 给员工分配角色
+export function assignRoles(data) {
+  return router({
+    url: `/sys/user/assignRoles`,
+    method: 'put',
+    data
+  })
+}
