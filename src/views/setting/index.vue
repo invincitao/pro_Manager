@@ -21,7 +21,7 @@
               <el-table-column label="描述" prop="description" />
               <el-table-column label="操作">
                 <template #default="{row}">
-                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button size="small" type="success" @click="assignPerm(row.id)">分配权限</el-button>
                   <el-button size="small" type="primary" @click="editRole(row.id)">编辑</el-button>
                   <el-button size="small" type="danger" @click="delRole(row.id)">删除</el-button>
                 </template>
@@ -83,14 +83,42 @@
         </el-row>
       </el-dialog>
     </div>
+
+    <el-dialog title="分配权限" :visible="showPermDialog" @close="btnPermCancel">
+      <!-- 权限是一颗树 -->
+      <!-- 将数据绑定到组件上 -->
+      <!-- check-strictly 如果为true 那表示父子勾选时  不互相关联 如果为false就互相关联 -->
+      <!-- id作为唯一标识 -->
+      <el-tree
+        ref="permTree"
+        :data="permData"
+        :props="{label:'name'}"
+        :show-checkbox="true"
+        :check-strictly="true"
+        :default-expand-all="true"
+        node-key="id"
+      />
+      <!-- 确定 取消 -->
+      <el-row slot="footer" type="flex" justify="center">
+        <el-col :span="6">
+          <el-button type="primary" size="small" @click="btnPermOK">确定</el-button>
+          <el-button size="small" @click="btnPermCancel">取消</el-button>
+        </el-col>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getCompanyInfo, getRoleList, delRole, getRoleDetail, editRole, addRole } from '@/api/setting'
+import { getCompanyInfo, getRoleList, delRole, getRoleDetail, editRole, addRole, assignPerm } from '@/api/setting'
+import { getPermList } from '@/api/permission'
+import { treeDatadepart } from '@/utils/index'
 export default {
   data() {
     return {
+      userId: '',
+      showPermDialog: false,
+      permData: [],
       // 公司信息
       formData: {
         name: '',
@@ -131,6 +159,28 @@ export default {
     this.getRoleList()
   },
   methods: {
+    // 分配权限
+    async assignPerm(id) {
+      this.userId = id
+      this.permData = treeDatadepart(await getPermList(), '0')
+      const { permIds } = await getRoleDetail(id)
+      this.showPermDialog = true
+      this.$nextTick(() => {
+        // 设置id
+        this.$refs.permTree.setCheckedKeys(permIds)
+      })
+    },
+    btnPermCancel() {
+      this.$refs.permTree.getCheckedKeys([])
+      this.showPermDialog = false
+    },
+    async btnPermOK() {
+      const id = this.userId
+      const permIds = this.$refs.permTree.getCheckedKeys()
+      await assignPerm({ id, permIds })
+      this.showPermDialog = false
+      this.$message.success('操作成功')
+    },
     // 公司信息
     async getCompanyInfo() {
       this.formData = await getCompanyInfo(this.$store.getters.companyId)
