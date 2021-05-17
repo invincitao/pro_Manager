@@ -39,6 +39,10 @@ for (const key in filter) {
   const fn = filter[key]
   Vue.filter(name, fn)
 }
+
+// mixin混入的添加
+import mixinObj from '@/mixin'
+Vue.mixin(mixinObj)
 Vue.config.productionTip = false
 
 new Vue({

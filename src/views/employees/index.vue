@@ -6,7 +6,7 @@
         <template slot="after">
           <el-button size="small" type="warning" @click="$router.push('/import')">导入</el-button>
           <el-button size="small" type="danger" @click="exportEmployees">导出</el-button>
-          <el-button size="small" type="primary" @click="showDialog = true">新增员工</el-button>
+          <el-button v-if="checkPermission('addEmployee')" size="small" type="primary" @click="showDialog = true">新增员工</el-button>
         </template>
       </page-tools>
       <!-- 放置表格和分页 -->
@@ -113,6 +113,11 @@ export default {
     this.getEmployeeList()
   },
   methods: {
+    // 检查是否有这个权限
+    // checkPermission(pointsName) {
+    //   // return this.$store.state.user.userInfo.roles.points.includes(pointsName)
+    //   return this.$store.getters.roles && this.$store.getters.roles.points.includes(pointsName)
+    // },
     // 权限
     assignRole(id) {
       this.userId = id
