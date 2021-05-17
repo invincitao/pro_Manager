@@ -10,7 +10,10 @@ router.beforeEach(async(to, from, next) => {
       next('/')
     } else {
       if (!store.getters.userId) {
-        await store.dispatch('user/getUserInfo')
+        const res = await store.dispatch('user/getUserInfo')
+        console.log(res)
+        const routes = await store.dispatch('permission/filterRoutes', res.roles.menus)
+        router.addRoutes(routes)
       }
       next()
     }

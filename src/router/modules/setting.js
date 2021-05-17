@@ -3,6 +3,7 @@ import Layout from '@/layout'
 //  {  path: '', component: '' }
 // 每个子模块 其实 都是外层是layout  组件位于layout的二级路由里面
 export default {
+  name: 'settings', // 给路由规则加一个name
   path: '/setting', // 路径
   component: Layout, // 组件
   // 配置二级路的路由表

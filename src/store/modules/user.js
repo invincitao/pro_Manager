@@ -42,6 +42,7 @@ const actions = {
       ...detail
     }
     store.commit('setUserInfo', data)
+    return data
   },
   // 退出登录
   loginOut(store) {
