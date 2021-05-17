@@ -4,7 +4,7 @@ const state = {
 }
 const mutations = {
   setRoutes(state, data) {
-    state.routes = [...data, ...constantRoutes]
+    state.routes = [...constantRoutes, ...data]
   }
 }
 const actions = {

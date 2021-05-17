@@ -13,9 +13,11 @@ router.beforeEach(async(to, from, next) => {
         const res = await store.dispatch('user/getUserInfo')
         console.log(res)
         const routes = await store.dispatch('permission/filterRoutes', res.roles.menus)
-        router.addRoutes(routes)
+        router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }])
+        next(to.path)
+      } else {
+        next()
       }
-      next()
     }
   } else {
     if (writeList.includes(to.path)) {

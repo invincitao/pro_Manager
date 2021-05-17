@@ -1,5 +1,6 @@
 import { login, getUserInfo, getUserDetailById } from '@/api/user.js'
 import { getToken, setToken, removeToken, setTime } from '@/utils/auth.js'
+import { resetRouter } from '@/router'
 const state = {
   token: getToken(),
   userInfo: {}
@@ -48,6 +49,11 @@ const actions = {
   loginOut(store) {
     store.commit('removeToken')
     store.commit('removeInfo')
+    // 退出登录应该清除历史路由页面
+    resetRouter()
+    store.commit('permission/setRoutes', [], {
+      root: true
+    })
   }
 }
 
