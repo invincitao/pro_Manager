@@ -9,6 +9,9 @@
     </div>
 
     <div class="right-menu">
+      <LangSwitch class="right-menu-item" />
+      <ThemePicker class="right-menu-item" />
+      <screen-full class="right-menu-item" />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-imgerr="require('@/assets/common/leifeng.jpg')" :src="staffPhoto" class="user-avatar">
@@ -135,12 +138,12 @@ export default {
           width: 40px;
           height: 40px;
           border-radius: 15px;
-          vertical-align: middle;
+          vertical-align: unset;
 
    }
    .name {
           color: #fff;
-          vertical-align: middle;
+          vertical-align: super;
           margin-left:5px;
    }
    .user-dropdown {
@@ -174,6 +177,8 @@ export default {
       border-radius: 10px;
       margin-left: 15px;
     }
-
+.right-menu-item {
+   vertical-align: middle;
+}
 }
 </style>
