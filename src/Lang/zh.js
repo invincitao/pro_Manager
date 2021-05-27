@@ -58,7 +58,7 @@ export default {
     salarysHistorical: '历史归档',
     salarysMonthStatement: '月报表',
     // 社保
-    'social_securitys': '社保',
+    'social': '社保',
     socialSecuritys: '社保管理',
     socialDetail: '详情',
     socialHistorical: '历史归档',
@@ -75,7 +75,7 @@ export default {
     'saas-clients': '企业',
     'saas-clients-details': '企业详情',
     // 权限
-    'permissions': '权限管理' // 权限管理
+    'permission': '权限管理' // 权限管理
   },
   navbar: {
     search: '站内搜索',

@@ -114,7 +114,7 @@ export default {
       height: 100%;
       font-size: 18px;
       color: #5a5e66;
-      vertical-align: text-bottom;
+      vertical-align: inherit;
 
       &.hover-effect {
         cursor: pointer;
@@ -177,8 +177,5 @@ export default {
       border-radius: 10px;
       margin-left: 15px;
     }
-.right-menu-item {
-   vertical-align: middle;
-}
 }
 </style>

@@ -11,7 +11,7 @@ export default {
 
     postInfo: 'Job information',
     manageSelf: 'Manager self-help',
-    setting: 'setting',
+    setting: 'Setting',
     report: 'report',
     employeesAdd: 'add employees',
     EditiNfo: 'Edit information',
@@ -47,20 +47,20 @@ export default {
     employeesLeave: 'Employees-Leave',
     employeesPrint: 'Employees-Print',
     // 工资
-    salarys: 'salarys',
+    salarys: 'Salarys',
     salarysList: 'Salarys-List',
     salarysSetting: 'Salarys-Setting',
     salarysDetails: 'Salarys-Details',
     salarysHistorical: 'Salarys-Historical',
     salarysMonthStatement: 'Salarys-Month',
     // 社保
-    'social_securitys': 'Social',
+    'social': 'Social',
     socialSecuritys: 'Social-Securitys',
     socialDetail: 'Social-Detail',
     socialHistorical: 'Social-Historical',
     socialMonthStatement: 'Social-Month',
     // 组织架构
-    departments: 'departments',
+    departments: 'Departments',
     'departments-import': 'import',
 
     // 公司
@@ -72,7 +72,7 @@ export default {
     // 企业
     'saas-clients': 'Saas-Clients',
     'saas-clients-details': 'Saas-Details',
-    'permissions': 'permissions' // 权限管理
+    'permission': 'Permissions' // 权限管理
 
   },
   navbar: {
